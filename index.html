@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Generator</title>
+  <!-- bootstrap css link -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <!-- bootstrap Icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+<body class="container bg-secondary bg-gradient d-flex justify-content-center">
+  <main class=" container-fluid w-75 bg-light my-3 rounded-2">
+    <!-- Header part -->
+    <section id="header" class=" my-3">
+      <div class=" d-flex justify-content-between">
+        <div><strong>Date: </strong><span id="date" class=" text-info">1/2/2022</span></div>
+        <div><i class="bi bi-cash-coin fs-4 text-info"></i></div>
+      </div>
+      <h1 class=" text-center">Invoice Generator</h1>
+    </section>
+    <hr>
+    <!-- Customer information -->
+    <section class=" my-3 row">
+      <div class=" col-7">
+        <h6>Bill For:</h6>
+        <input   type="text" class=" w-75 rounded p-2 mt-4" id="user-name" placeholder="Enter customer name"><br>
+        <input type="text" class=" w-75 rounded p-2 mt-4" id="user-email" placeholder="Enter customer email ex(abc@mail.com)"><br>
+        <input type="text" class=" w-75 rounded p-2 mt-4" id="user-phone" placeholder="Enter customer phone number">
+        <button id="submit-btn" class="d-block btn-outline-success mt-5 btn ">submit</button>
+      </div>
+      <div class=" col-5 my-5">
+        <div id="name-error" class="toast align-items-center mb-3 w-75 bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+          Invalid name!
+         </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+        <div id="email-error" class="toast mb-3  align-items-center w-75 bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+          Invalid email!
+         </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+        <div id="phone-error" class="toast mb-3  align-items-center w-75 bg-danger text-light" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+          Invalid phone number
+         </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+      </div>
+      
+    </section>
+
+    <!-- Item details -->
+    <section class=" my-5">
+      <div id="item-details ">
+        <div id="item-headers" class=" row border-bottom border-top border-dark p-3">
+          <div id="item-header" class="col-6">
+            <h6>Item Name</h6>
+          </div>
+          <div id="item-others" class=" row col-6">
+            <h6 class=" col-3">Rate</h6>
+            <h6 class=" col-3">Quantity</h6>
+            <h6 class=" col-3">Total</h6>
+            <h6 class=" col-3">Action</h6>
+          </div>
+        </div>
+        <div id="item-info" class=" row border-bottom border-top border-dark p-3">
+          <div  class="col-6">
+            <input id="item-name"  type="text" name="" placeholder="Item name" class="w-75 p-2">
+          </div>
+          <div id="item-others" class=" row col-6 gap-1 align-items-center">
+            <input class=" col-3" type="number" name="" id="item-rate" min="0">
+            <input class=" col-3" onchange="itemQuantity(); itemTotal();"  type="number" name="" id="item-quantity" min="0">
+            
+            <h6 class=" col-3 mb-0">$ <span id="individual-total">00</span></h6>
+            <button id="add-button" class="col-2 btn-info text-light">add</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coupon section -->
+    <section class=" my-5 d-flex justify-content-center">
+      <!-- card -->
+      <div class="card text-center" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Get upto 10% discount</h5>
+          <h4><i class="bi bi-ticket-perforated-fill text-success"></i></h4>
+          <h3 class="card-text"> <span id="coupon-percent">*</span> %</h3>
+          <button id="coupon-button" class="btn btn-info text-light">Apply Coupon</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Details show -->
+    <section class=" my-5">
+      <h4 class=" text-center mb-3">Your Invoice</h4>
+      <hr>
+      <div class="my-3">
+        <h6>Invoice no: #<span id="user-invoice-show" class=" text-info">  </span></h6>
+        <h6>Name : <span id="user-name-show" class=" text-info">  </span></h6>
+        <h6>Email: <span id="user-email-show" class=" text-info">  </span></h6>
+        <h6>Phone: <span id="user-phone-show" class=" text-info">  </span></h6>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Index</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody id="data-table">
+          
+          <!-- <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>0</td>
+            <td>00</td>
+          </tr> -->
+
+        </tbody>
+      </table>
+    </section>
+    <!-- total price -->
+    <section class=" my-5">
+      <div class="container">
+        <div class="row gap-2">
+          <div class="col-5">
+          </div>
+          <!-- calculated price -->
+          <div class="col-5">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Sub-Total</th>
+                  <td>$ <span id="sub-total">00</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Discount</th>
+                  <td>$ <span id="discount-amount">00</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Tax</th>
+                  <td>$ <span id="tax">00</span></td>
+                </tr>
+                <tr class=" bg-info">
+                  <th scope="row">Total</th>
+                  <td><strong>$ <span id="total">00</span></strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class=" d-flex justify-content-end me-5">
+        <button class=" btn btn-outline-success" id="refresh">Refresh</button>
+      </div>
+    </section>
+    <div class="d-flex justify-content-center">
+      <marquee width="60%" direction="left" height="100px" class=" text-danger">
+        All credit goes to Astro boy by the grace of Allah.
+        </marquee>
+    </div>
+  </main>
+  <!-- js link -->
+  <script src="script.js"></script>
+  <!-- js bundle bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
